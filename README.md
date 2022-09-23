@@ -1,0 +1,1 @@
+this will look totally incomprehensible but it's actually really useful. trust me. documentation, examples, and tests coming soon :)
