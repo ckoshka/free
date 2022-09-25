@@ -1,18 +1,17 @@
 // deno-lint-ignore-file no-explicit-any
-type AnyAsyncFn = (...args: any[]) => Promise<any>;
-export type FnRecord = Record<string, any>;
-type OptionalPromise<T> = Promise<T> | T;
 
-type ExcludeProps<A extends FnRecord, B extends Partial<A>> = {
-	[K in keyof A]: B[K] extends A[K] ? never : A[K];
-};
+import {
+	AnyAsyncFn,
+	ExcludeProps,
+	FnRecord,
+	OptionalPromise,
+} from "./type_utils.ts";
 
 export class Free<
 	T,
 	Effects extends FnRecord = Record<never, never>,
 	DerivedEffects extends FnRecord = Record<never, never>,
 > {
-
 	constructor(
 		private fns: [
 			...AnyAsyncFn[],
@@ -47,7 +46,7 @@ export class Free<
 				Promise.resolve(fn(a0, effs)),
 		], this.derivation);
 	}
-    
+
 	static reader<InputsType extends Record<string, any>, ReturnType>(
 		fn: (inputs: InputsType) => ReturnType | Promise<ReturnType>,
 	) {
@@ -87,7 +86,6 @@ export class Free<
 			...fn({ ...a, ...this.derivation(a) }),
 		}));
 	}
-
 
 	run(impl: Omit<Effects, keyof DerivedEffects>): Promise<T> {
 		const joinedImpl = { ...impl, ...this.derivation(impl as any) };
@@ -137,4 +135,3 @@ export class Free<
 		);
 	}
 }
-
