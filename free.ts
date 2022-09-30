@@ -5,7 +5,7 @@ import {
 	ExcludeProps,
 	FnRecord,
 	OptionalPromise,
-} from "./internal_type_utils.ts";
+} from "./types/internal_type_utils.ts";
 
 export class Free<
 	T,

@@ -1,4 +1,4 @@
-import { Free, use } from "https://cdn.jsdelivr.net/gh/ckoshka/free/mod.ts";
+import { use } from "https://cdn.jsdelivr.net/gh/ckoshka/free/mod.ts";
 
 // a utility that:
 // - fetches a url,

@@ -1,3 +1,4 @@
+// deno-lint-ignore-file no-explicit-any
 
 export type AnyAsyncFn = (...args: any[]) => Promise<any>;
 export type FnRecord = Record<string, any>;
