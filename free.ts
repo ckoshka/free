@@ -86,6 +86,21 @@ export class Free<
 			...fn({ ...a, ...this.derivation(a) }),
 		}));
 	}
+	defaultF<ImplEffects extends Partial<Effects & DerivedEffects>>(
+		fn: (a0: Effects & DerivedEffects) => ImplEffects,
+	) {
+		return new Free<
+			T,
+			ExcludeProps<Effects, ImplEffects> & Partial<ImplEffects>,
+			DerivedEffects & ImplEffects
+		>([
+			...this.fns,
+		], (a) => ({
+			...this.derivation(a),
+			...fn({ ...a, ...this.derivation(a) }),
+			...a
+		}));
+	}
 
 	run(impl: Omit<Effects, keyof DerivedEffects>): Promise<T> {
 		const joinedImpl = { ...impl, ...this.derivation(impl as any) };
