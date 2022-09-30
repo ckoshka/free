@@ -39,7 +39,11 @@ export class Free<
 		], (a) => a);
 	}
 
-	map<B>(fn: (a0: T, effs: Effects & DerivedEffects) => B | Promise<B>) {
+	map<B>(
+		fn:
+			| ((a0: T, effs: Effects & DerivedEffects) => B | Promise<B>)
+			| ((a0: T) => B | Promise<B>),
+	) {
 		return new Free<B, Effects, DerivedEffects>([
 			...this.fns,
 			(a0: T, effs: Effects & DerivedEffects) =>
@@ -98,7 +102,7 @@ export class Free<
 		], (a) => ({
 			...this.derivation(a),
 			...fn({ ...a, ...this.derivation(a) }),
-			...a
+			...a,
 		}));
 	}
 
@@ -116,10 +120,14 @@ export class Free<
 		Effs2 extends FnRecord,
 		DerivedEffects2 extends FnRecord,
 	>(
-		fn: (
-			a0: T,
-			effs: Effects & DerivedEffects,
-		) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>,
+		fn:
+			| ((
+				a0: T,
+				effs: Effects & DerivedEffects,
+			) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>)
+			| ((
+				a0: T,
+			) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>),
 	): Free<B, Effs2 & Effects, DerivedEffects> {
 		return new Free<B, Effs2 & Effects, DerivedEffects>([
 			...this.fns,
