@@ -32,7 +32,7 @@ const getMarkdown = () =>
 // if our end-user wants to save this to disk,
 // they don't even have to supply any of the effects
 
-const _saveMarkdown = getMarkdown().map((text) =>
+const _saveMarkdown = getMarkdown().map((text: string) =>
 	Deno.writeTextFile("my_file.md", text)
 );
 

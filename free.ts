@@ -27,7 +27,7 @@ export class Free<
 		], this.derivation);
 	}
 
-	static lift<B, Effs>(data: B) {
+	static lift<B, Effs extends FnRecord>(data: B) {
 		return new Free<B, Effs>([
 			() => Promise.resolve(data),
 		], (a) => a);
@@ -41,8 +41,8 @@ export class Free<
 
 	map<B>(
 		fn:
-			| ((a0: T, effs: Effects & DerivedEffects) => B | Promise<B>)
-			| ((a0: T) => B | Promise<B>),
+			((a0: T, effs: Effects & DerivedEffects) => B | Promise<B>)
+			
 	) {
 		return new Free<B, Effects, DerivedEffects>([
 			...this.fns,
@@ -121,12 +121,9 @@ export class Free<
 		DerivedEffects2 extends FnRecord,
 	>(
 		fn:
-			| ((
+			((
 				a0: T,
 				effs: Effects & DerivedEffects,
-			) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>)
-			| ((
-				a0: T,
 			) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>),
 	): Free<B, Effs2 & Effects, DerivedEffects> {
 		return new Free<B, Effs2 & Effects, DerivedEffects>([
