@@ -40,9 +40,7 @@ export class Free<
 	}
 
 	map<B>(
-		fn:
-			((a0: T, effs: Effects & DerivedEffects) => B | Promise<B>)
-			
+		fn: (a0: T, effs: Effects & DerivedEffects) => B | Promise<B>,
 	) {
 		return new Free<B, Effects, DerivedEffects>([
 			...this.fns,
@@ -120,11 +118,10 @@ export class Free<
 		Effs2 extends FnRecord,
 		DerivedEffects2 extends FnRecord,
 	>(
-		fn:
-			((
-				a0: T,
-				effs: Effects & DerivedEffects,
-			) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>),
+		fn: (
+			a0: T,
+			effs: Effects & DerivedEffects,
+		) => OptionalPromise<Free<B, Effs2, DerivedEffects2>>,
 	): Free<B, Effs2 & Effects, DerivedEffects> {
 		return new Free<B, Effs2 & Effects, DerivedEffects>([
 			...this.fns,
@@ -143,11 +140,11 @@ export class Free<
 		return new Free<B[], Effs>(
 			[
 				async (_: null, effs: Effs) => {
-					const results: B[] = [];
-					for (const free of frees) {
-						await (await Promise.resolve(free)).run({ ...effs })
-							.then((r) => results.push(r));
-					}
+					const results: B[] = await Promise.all(
+						frees.map(async (free) =>
+							await (await Promise.resolve(free)).run({ ...effs })
+						),
+					);
 					return results;
 				},
 			],
