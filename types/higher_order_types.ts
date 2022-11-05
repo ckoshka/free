@@ -13,7 +13,7 @@ type Unnested<T> = T extends Promise<infer K> ? K : T;
 export type Async<T extends Record<string, (...args: any[]) => any>> = {
 	[K in keyof T]: (
 		...args: Parameters<T[K]>
-	) => Promise<Unnested<ReturnType<T[K]>>>;
+	) => Promise<Unnested<ReturnType<T[K]>>> | Unnested<ReturnType<T[K]>>;
 };
 
 export type Rename<

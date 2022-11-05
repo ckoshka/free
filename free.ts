@@ -27,8 +27,8 @@ export class Free<
 		], this.derivation);
 	}
 
-	static lift<B, Effs extends FnRecord>(data: B) {
-		return new Free<B, Effs>([
+	static lift<B>(data: B) {
+		return new Free<B, Record<never, never>>([
 			() => Promise.resolve(data),
 		], (a) => a);
 	}
