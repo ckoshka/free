@@ -9,8 +9,8 @@ import {
 
 export class Free<
 	T,
-	Effects extends FnRecord = Record<never, never>,
-	DerivedEffects extends FnRecord = Record<never, never>,
+	Effects = Record<never, never>,
+	DerivedEffects = Record<never, never>,
 > {
 	constructor(
 		private fns: [
@@ -33,7 +33,7 @@ export class Free<
 		], (a) => a);
 	}
 
-	static new<Effs extends FnRecord>() {
+	static new<Effs>() {
 		return new Free<null, Effs, Record<never, never>>([
 			() => Promise.resolve(null),
 		], (a) => a);
@@ -49,7 +49,7 @@ export class Free<
 		], this.derivation);
 	}
 
-	static reader<InputsType extends Record<string, any>, ReturnType>(
+	static reader<InputsType, ReturnType>(
 		fn: (inputs: InputsType) => ReturnType | Promise<ReturnType>,
 	) {
 		return new Free<ReturnType, InputsType>([
@@ -63,7 +63,7 @@ export class Free<
 		);
 	}
 
-	extendF<NewEffs extends FnRecord>(
+	extendF<NewEffs>(
 		fn: (a0: Effects & DerivedEffects) => NewEffs,
 	) {
 		return new Free<T, Effects, DerivedEffects & NewEffs>([
@@ -115,8 +115,8 @@ export class Free<
 
 	chain<
 		B,
-		Effs2 extends FnRecord,
-		DerivedEffects2 extends FnRecord,
+		Effs2,
+		DerivedEffects2,
 	>(
 		fn: (
 			a0: T,
@@ -133,7 +133,7 @@ export class Free<
 	}
 	static flatten<
 		B,
-		Effs extends FnRecord,
+		Effs,
 	>(
 		frees: OptionalPromise<Free<B, Effs, FnRecord>>[],
 	) {
